@@ -45,3 +45,15 @@ app.*.map.json
 # google services
 ios/Runner/GoogleService-Info.plist
 android/app/google-services.json
+# Local Firebase and credential configuration
+firebase.local.json
+**/google-services.json
+**/GoogleService-Info.plist
+**/*service-account*.json
+**/*serviceAccount*.json
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.jks
