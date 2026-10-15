@@ -40,6 +40,13 @@ class _AddExpenseState extends State<AddExpense> {
           setState(() {
             isLoading = true;
           });
+        } else if (state is CreateExpenseFailure) {
+          setState(() {
+            isLoading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Could not save expense. Please try again.')),
+          );
         }
       },
       child: GestureDetector(
@@ -71,7 +78,7 @@ class _AddExpenseState extends State<AddExpense> {
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
-                              prefixIcon: const Icon(
+                              prefixIcon: const FaIcon(
                                 FontAwesomeIcons.dollarSign,
                                 size: 16,
                                 color: Colors.grey,
@@ -95,7 +102,7 @@ class _AddExpenseState extends State<AddExpense> {
                                 ? Colors.white
                                 : Color(expense.category.color),
                             prefixIcon: expense.category == Category.empty
-                                ? const Icon(
+                                ? const FaIcon(
                               FontAwesomeIcons.list,
                               size: 16,
                               color: Colors.grey,
@@ -112,7 +119,7 @@ class _AddExpenseState extends State<AddExpense> {
                                   state.categories.insert(0, newCategory);
                                 });
                               },
-                              icon: const Icon(
+                              icon: const FaIcon(
                                 FontAwesomeIcons.plus,
                                 size: 16,
                                 color: Colors.grey,
@@ -184,7 +191,7 @@ class _AddExpenseState extends State<AddExpense> {
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
-                            prefixIcon: const Icon(
+                            prefixIcon: const FaIcon(
                               FontAwesomeIcons.clock,
                               size: 16,
                               color: Colors.grey,
