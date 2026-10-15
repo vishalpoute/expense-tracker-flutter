@@ -211,9 +211,14 @@ class _AddExpenseState extends State<AddExpense> {
                               ? const Center(child: CircularProgressIndicator())
                               : TextButton(
                             onPressed: () {
-                              setState(() {
-                                expense.amount = int.parse(expenseController.text);
-                              });
+                              final amount = int.tryParse(expenseController.text.trim());
+                              if (amount == null || amount <= 0) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Enter a positive whole-number amount.')),
+                                );
+                                return;
+                              }
+                              expense.amount = amount;
 
                               context.read<CreateExpenseBloc>().add(CreateExpense(expense));
                             },

@@ -25,6 +25,34 @@ class FailingRepository implements ExpenseRepository {
 }
 
 void main() {
+  testWidgets('invalid amounts show feedback without saving', (tester) async {
+    final repository = FailingRepository();
+    final saveBloc = CreateExpenseBloc(repository);
+    final categoriesBloc = GetCategoriesBloc(repository)..add(GetCategories());
+    addTearDown(saveBloc.close);
+    addTearDown(categoriesBloc.close);
+    await tester.pumpWidget(MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: saveBloc),
+        BlocProvider.value(value: categoriesBloc),
+      ],
+      child: const MaterialApp(home: AddExpense()),
+    ));
+    await tester.pumpAndSettle();
+    for (final value in ['', 'abc', '1.5', '0', '-5', '999999999999999999999999999999']) {
+      await tester.ensureVisible(find.byType(TextFormField).first);
+      await tester.enterText(find.byType(TextFormField).first, value);
+      await tester.ensureVisible(find.text('Save'));
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+      expect(find.text('Enter a positive whole-number amount.'), findsOneWidget);
+      expect(repository.attempts, 0);
+      expect(tester.takeException(), isNull);
+      await tester.pump(const Duration(seconds: 5));
+      await tester.pumpAndSettle();
+    }
+  });
+
   testWidgets('failed save shows feedback and allows retry', (tester) async {
     final repository = FailingRepository();
     final saveBloc = CreateExpenseBloc(repository);
