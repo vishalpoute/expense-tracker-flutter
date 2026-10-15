@@ -13,7 +13,8 @@ class Expense {
     required this.amount,
   });
 
-  static final empty = Expense(
+  // Each form needs an independent mutable draft.
+  static Expense get empty => Expense(
     expenseId: '',
     category: Category.empty,
     date: DateTime.now(),
