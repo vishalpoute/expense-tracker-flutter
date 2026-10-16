@@ -98,10 +98,10 @@ class _AddExpenseState extends State<AddExpense> {
                           onTap: () {},
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: expense.category == Category.empty
+                            fillColor: expense.category.categoryId.isEmpty
                                 ? Colors.white
                                 : Color(expense.category.color),
-                            prefixIcon: expense.category == Category.empty
+                            prefixIcon: expense.category.categoryId.isEmpty
                                 ? const FaIcon(
                               FontAwesomeIcons.list,
                               size: 16,
