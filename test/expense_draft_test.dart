@@ -2,6 +2,27 @@ import 'package:expense_repository/expense_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('category drafts and expense defaults are independent', () {
+    final first = Category.empty;
+    first.categoryId = 'saved-category';
+    first.name = 'Food';
+    first.icon = 'food';
+    first.color = 123;
+    final second = Category.empty;
+    expect(identical(first, second), isFalse);
+    expect(second.categoryId, isEmpty);
+    expect(second.name, isEmpty);
+    expect(second.icon, isEmpty);
+    expect(second.color, 0);
+    second.name = 'Travel';
+    expect(first.name, 'Food');
+    final firstExpense = Expense.empty;
+    final secondExpense = Expense.empty;
+    firstExpense.category.name = 'Draft only';
+    expect(secondExpense.category.name, isEmpty);
+    expect(Category.empty.name, isEmpty);
+  });
+
   test('new expense drafts do not overwrite earlier expenses', () {
     final first = Expense.empty;
     first.expenseId = 'saved-id';
