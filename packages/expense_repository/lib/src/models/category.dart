@@ -15,7 +15,8 @@ class Category {
     required this.color,
   });
 
-  static final empty = Category(
+  // Category forms must not share a mutable draft.
+  static Category get empty => Category(
     categoryId: '', 
     name: '', 
     totalExpenses: 0, 
