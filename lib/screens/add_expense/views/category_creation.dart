@@ -33,6 +33,13 @@ Future getCategoryCreation(BuildContext context) {
                 setState(() {
                   isLoading = true;
                 });
+              } else if (state is CreateCategoryFailure) {
+                setState(() {
+                  isLoading = false;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Could not save category. Please try again.')),
+                );
               }
             },
             child: AlertDialog(
