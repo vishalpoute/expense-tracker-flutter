@@ -177,11 +177,11 @@ class _AddExpenseState extends State<AddExpense> {
                             DateTime? newDate = await showDatePicker(
                               context: context,
                               initialDate: expense.date,
-                              firstDate: DateTime.now(),
+                              firstDate: DateTime(2000),
                               lastDate: DateTime.now().add(const Duration(days: 365)),
                             );
 
-                            if (newDate != null) {
+                            if (mounted && newDate != null) {
                               setState(() {
                                 dateController.text = DateFormat('dd/MM/yyyy').format(newDate);
                                 expense.date = newDate;
