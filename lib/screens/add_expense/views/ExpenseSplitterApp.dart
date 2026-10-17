@@ -1,3 +1,4 @@
+import 'package:expenses_tracker/utils/split_calculation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,12 +36,9 @@ class _ExpenseSplitterPageState extends State<ExpenseSplitterPage> {
   }
 
   void _calculateSplitAmount() {
-    if (_expenseController.text.isNotEmpty) {
-      final totalAmount = double.parse(_expenseController.text);
-      setState(() {
-        _splitAmount = totalAmount / _people.length;
-      });
-    }
+    setState(() {
+      _splitAmount = calculateEqualShare(_expenseController.text, _people.length);
+    });
   }
 
   void _addPerson() {
@@ -171,13 +169,11 @@ class _ExpenseSplitterPageState extends State<ExpenseSplitterPage> {
                             prefixIcon: Icon(Icons.attach_money),
                           ),
                           onChanged: (value) {
-                            if (value.isNotEmpty) {
-                              _calculateSplitAmount();
-                            }
+                            _calculateSplitAmount();
                           },
                           validator: (value) {
                             if (value?.isEmpty ?? true) return 'Please enter an amount';
-                            if (double.tryParse(value!) == null) return 'Please enter a valid number';
+                            if (parseExpenseTotal(value!) == null) return 'Please enter a positive finite amount';
                             return null;
                           },
                         ),
