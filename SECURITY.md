@@ -11,3 +11,8 @@ Firebase client keys remain visible in compiled applications. Protect data using
 Keep backend credentials in environment variables or a deployment secret store. If a privileged credential has been published, revoke or rotate it with the provider first. Deleting a file does not invalidate a credential or erase previous Git commits.
 
 Official guidance: https://firebase.google.com/docs/projects/api-keys
+
+
+## Expense splitter email notifications
+
+Direct SMTP delivery from the client is disabled. A mail credential was previously committed in the splitter source and must be revoked in the provider account; removing it from the latest source does not revoke it or remove historical copies. Do not replace it with another client-side password, build-time secret, or local JSON credential. Restore notifications only through an authenticated trusted backend that keeps provider credentials server-side. Saving expenses remains available; the UI reports that notification delivery is not configured.

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
 import 'package:uuid/uuid.dart';
 
 class Person {
@@ -87,32 +85,8 @@ class _ExpenseSplitterPageState extends State<ExpenseSplitterPage> {
   }
 
   Future<void> _sendEmailToAll() async {
-    final smtpServer = gmail('vishupoute154@gmail.com', 'yjdxotegglktancn'); // Replace with your email and password
-    final totalAmount = double.parse(_expenseController.text);
-    final splitAmount = totalAmount / _people.length;
-    final description = _descriptionController.text;
-
-    for (var person in _people) {
-      final message = Message()
-        ..from = const Address('vishupoute154@gmail.com', 'Expense Splitter App')
-        ..recipients.add(person.email)
-        ..subject = 'Expense Split Notification'
-        ..html = '''
-          <h3>Expense Split Notification</h3>
-          <p>You have a new expense to split:</p>
-          <p><strong>Total Amount:</strong> \$${totalAmount.toStringAsFixed(2)}</p>
-          <p><strong>Your Share:</strong> \$${splitAmount.toStringAsFixed(2)}</p>
-          <p><strong>Description:</strong> $description</p>
-          <p><strong>Split between:</strong> ${_people.map((p) => p.email).join(', ')}</p>
-          <p>This is an automated message from the Expense Splitter app.</p>
-        ''';
-
-      try {
-        await send(message, smtpServer);
-      } catch (e) {
-        throw Exception('Failed to send email to ${person.email}: $e');
-      }
-    }
+    // Notifications require a trusted server; client apps must not hold SMTP credentials.
+    throw StateError('Email notifications require secure server-side configuration.');
   }
 
   Future<void> _saveExpense() async {
