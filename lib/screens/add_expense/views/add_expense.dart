@@ -238,6 +238,19 @@ class _AddExpenseState extends State<AddExpense> {
                     ),
                   ),
                 );
+              } else if (state is GetCategoriesFailure) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text('Could not load categories.'),
+                      TextButton(
+                        onPressed: () => context.read<GetCategoriesBloc>().add(GetCategories()),
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                );
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),
