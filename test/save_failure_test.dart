@@ -25,7 +25,40 @@ class FailingRepository implements ExpenseRepository {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
+class CategoryLoadingRepository extends FailingRepository {
+  int loads = 0;
+  @override
+  Future<List<Category>> getCategory() async {
+    loads++;
+    if (loads == 1) throw Exception('offline');
+    return [];
+  }
+}
+
 void main() {
+  testWidgets('category loading failure can be retried', (tester) async {
+    final repository = CategoryLoadingRepository();
+    final saveBloc = CreateExpenseBloc(repository);
+    final categoriesBloc = GetCategoriesBloc(repository)..add(GetCategories());
+    addTearDown(saveBloc.close);
+    addTearDown(categoriesBloc.close);
+    await tester.pumpWidget(MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: saveBloc),
+        BlocProvider.value(value: categoriesBloc),
+      ],
+      child: const MaterialApp(home: AddExpense()),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Could not load categories.'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+    expect(repository.loads, 2);
+    expect(find.text('Could not load categories.'), findsNothing);
+    expect(find.text('Save'), findsOneWidget);
+  });
+
   testWidgets('past expense dates can be selected', (tester) async {
     final repository = FailingRepository();
     final saveBloc = CreateExpenseBloc(repository);
