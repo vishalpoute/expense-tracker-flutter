@@ -13,7 +13,7 @@ class FailingRepository implements ExpenseRepository {
   Completer<void> pending = Completer<void>();
 
   @override
-  Future<List<Category>> getCategory() async => [];
+  Future<List<Category>> getCategory() async => [Category(categoryId: 'food', name: 'Food', totalExpenses: 0, icon: 'food', color: 0)];
 
   @override
   Future<void> createExpense(Expense expense) {
@@ -36,6 +36,38 @@ class CategoryLoadingRepository extends FailingRepository {
 }
 
 void main() {
+  testWidgets('a valid amount still requires a selected category', (tester) async {
+    final repository = FailingRepository();
+    final saveBloc = CreateExpenseBloc(repository);
+    final categoriesBloc = GetCategoriesBloc(repository)..add(GetCategories());
+    addTearDown(saveBloc.close);
+    addTearDown(categoriesBloc.close);
+    await tester.pumpWidget(MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: saveBloc),
+        BlocProvider.value(value: categoriesBloc),
+      ],
+      child: const MaterialApp(home: AddExpense()),
+    ));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField).first, '25');
+    await tester.ensureVisible(find.text('Save'));
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('Choose a category before saving.'), findsOneWidget);
+    expect(repository.attempts, 0);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Food'));
+    await tester.tap(find.text('Food'));
+    await tester.ensureVisible(find.text('Save'));
+    await tester.tap(find.text('Save'));
+    await tester.pump();
+    expect(repository.attempts, 1);
+    repository.pending.completeError(Exception('offline'));
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('category loading failure can be retried', (tester) async {
     final repository = CategoryLoadingRepository();
     final saveBloc = CreateExpenseBloc(repository);
@@ -130,6 +162,8 @@ void main() {
     ));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).first, '25');
+    await tester.ensureVisible(find.text('Food'));
+    await tester.tap(find.text('Food'));
     await tester.ensureVisible(find.text('Save'));
     await tester.tap(find.text('Save'));
     await tester.pump();
