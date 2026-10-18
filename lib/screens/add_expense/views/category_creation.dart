@@ -175,10 +175,17 @@ Future getCategoryCreation(BuildContext context) {
                           )
                         : TextButton(
                             onPressed: () {
+                              final name = categoryNameController.text.trim();
+                              if (name.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Enter a category name.')),
+                                );
+                                return;
+                              }
                               // Create Category Object and POP
                               setState(() {
                                 category.categoryId = const Uuid().v1();
-                                category.name = categoryNameController.text;
+                                category.name = name;
                                 category.icon = iconSelected;
                                 category.color = categoryColor.value;
                               });
