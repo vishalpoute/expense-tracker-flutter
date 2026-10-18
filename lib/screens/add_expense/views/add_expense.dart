@@ -218,6 +218,12 @@ class _AddExpenseState extends State<AddExpense> {
                                 );
                                 return;
                               }
+                              if (expense.category.categoryId.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Choose a category before saving.')),
+                                );
+                                return;
+                              }
                               expense.amount = amount;
 
                               context.read<CreateExpenseBloc>().add(CreateExpense(expense));
