@@ -24,8 +24,6 @@ class RecoveringRepository implements ExpenseRepository {
 
 void main() {
   testWidgets('failed expense load can retry and show the loaded expenses', (tester) async {
-    await tester.binding.setSurfaceSize(const Size(400, 900));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
     final repository = RecoveringRepository();
     final bloc = GetExpensesBloc(repository)..add(GetExpenses());
     addTearDown(bloc.close);
