@@ -9,15 +9,26 @@ import 'package:flutter_test/flutter_test.dart';
 class CategoryRepository implements ExpenseRepository {
   int attempts = 0;
   String? savedName;
+  String? savedIcon;
   Completer<void> pending = Completer<void>();
   @override
   Future<void> createCategory(Category category) {
     attempts++;
     savedName = category.name;
+    savedIcon = category.icon;
     return pending.future;
   }
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+Future<void> selectFoodIcon(WidgetTester tester) async {
+  await tester.tap(find.byType(TextFormField).at(1));
+  await tester.pumpAndSettle();
+  await tester.tap(find.byKey(const ValueKey('food')));
+  await tester.pumpAndSettle();
+  expect(find.text('food'), findsOneWidget);
+  expect(find.byType(GridView), findsNothing);
 }
 
 void main() {
@@ -44,9 +55,17 @@ void main() {
     }
     await tester.enterText(find.byType(TextFormField).first, '  Food  ');
     await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(repository.attempts, 0);
+    expect(find.text('Choose a category icon.'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+    await selectFoodIcon(tester);
+    await tester.tap(find.text('Save'));
     await tester.pump();
     expect(repository.attempts, 1);
     expect(repository.savedName, 'Food');
+    expect(repository.savedIcon, 'food');
     repository.pending.complete();
     await tester.pumpAndSettle();
   });
@@ -64,6 +83,7 @@ void main() {
     await tester.tap(find.text('Create'));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).first, 'Food');
+    await selectFoodIcon(tester);
     await tester.tap(find.text('Save'));
     await tester.pump();
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
