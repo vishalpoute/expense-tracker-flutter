@@ -1,3 +1,4 @@
+import 'package:expenses_tracker/widgets/category_icon.dart';
 
 import 'dart:math';
 
@@ -260,9 +261,8 @@ class MainScreen extends StatelessWidget {
                                         shape: BoxShape.circle
                                       ),
                                     ),
-                                    Image.asset(
-                                      'assets/${expenses[i].category.icon}.png',
-                                      scale: 2,
+                                    CategoryIcon(
+                                      name: expenses[i].category.icon,
                                       color: Colors.white,
                                     )
                                   ],
