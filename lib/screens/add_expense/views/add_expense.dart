@@ -1,3 +1,4 @@
+import 'package:expenses_tracker/widgets/category_icon.dart';
 import 'package:expense_repository/expense_repository.dart';
 import 'package:expenses_tracker/screens/add_expense/blocs/create_expense_bloc/create_expense_bloc.dart';
 import 'package:expenses_tracker/screens/add_expense/blocs/get_categories_bloc/get_categories_bloc.dart';
@@ -107,9 +108,8 @@ class _AddExpenseState extends State<AddExpense> {
                               size: 16,
                               color: Colors.grey,
                             )
-                                : Image.asset(
-                              'assets/${expense.category.icon}.png',
-                              scale: 2,
+                                : CategoryIcon(
+                                      name: expense.category.icon,
                             ),
                             suffixIcon: IconButton(
                               onPressed: () async {
@@ -153,9 +153,8 @@ class _AddExpenseState extends State<AddExpense> {
                                         categoryController.text = expense.category.name;
                                       });
                                     },
-                                    leading: Image.asset(
-                                      'assets/${state.categories[i].icon}.png',
-                                      scale: 2,
+                                    leading: CategoryIcon(
+                                      name: state.categories[i].icon,
                                     ),
                                     title: Text(state.categories[i].name),
                                     tileColor: Color(state.categories[i].color),
