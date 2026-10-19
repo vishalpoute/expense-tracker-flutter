@@ -96,9 +96,12 @@ Future getCategoryCreation(BuildContext context) {
                               itemCount: myCategoriesIcons.length,
                               itemBuilder: (context, int i) {
                                 return GestureDetector(
+                                  key: ValueKey(myCategoriesIcons[i]),
                                   onTap: () {
                                     setState(() {
                                       iconSelected = myCategoriesIcons[i];
+                                      categoryIconController.text = iconSelected;
+                                      isExpended = false;
                                     });
                                   },
                                   child: Container(
@@ -179,6 +182,12 @@ Future getCategoryCreation(BuildContext context) {
                               if (name.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(content: Text('Enter a category name.')),
+                                );
+                                return;
+                              }
+                              if (iconSelected.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Choose a category icon.')),
                                 );
                                 return;
                               }
