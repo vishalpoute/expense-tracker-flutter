@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../data/data.dart';
 
 class MainScreen extends StatelessWidget {
   final List<Expense> expenses;
@@ -17,8 +16,9 @@ class MainScreen extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 10),
-        child: Column(
-          children: [
+        child: CustomScrollView(
+          slivers: [
+            SliverList.list(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -231,8 +231,8 @@ class MainScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
+            ]),
+            SliverList.builder(
                 itemCount: expenses.length,
                 itemBuilder: (context, int i) {
                   return Padding(
@@ -304,9 +304,8 @@ class MainScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                }
-              ),
-            )
+                },
+            ),
           ],
         ),
       ),
