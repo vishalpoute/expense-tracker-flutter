@@ -93,6 +93,22 @@ class _HomeScreenState extends State<HomeScreen> {
             body: index == 0 
               ? MainScreen(state.expenses) 
               : const StatScreen());
+        } else if (state is GetExpensesFailure) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Unable to load expenses. Please try again.'),
+                  const SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () => context.read<GetExpensesBloc>().add(GetExpenses()),
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+          );
         } else {
           return const Scaffold(
             body: Center(
