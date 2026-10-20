@@ -248,7 +248,8 @@ class MainScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
+                            Expanded(
+                              child: Row(
                               children: [
                                 Stack(
                                   alignment: Alignment.center,
@@ -268,16 +269,22 @@ class MainScreen extends StatelessWidget {
                                   ],
                                 ),
                                 const SizedBox(width: 12),
-                                Text(
+                                Expanded(
+                                  child: Text(
                                   expenses[i].category.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Theme.of(context).colorScheme.onSurface,
                                     fontWeight: FontWeight.w500
                                   ),
+                                  ),
                                 ),
                               ],
+                              ),
                             ),
+                            const SizedBox(width: 12),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
