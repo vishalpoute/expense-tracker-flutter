@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('long category names fit beside transaction amounts', (tester) async {
-    await tester.binding.setSurfaceSize(const Size(400, 800));
+    await tester.binding.setSurfaceSize(const Size(360, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     final expense = Expense.empty;
     expense.amount = 12345;
@@ -19,7 +19,7 @@ void main() {
     expect(label.overflow, TextOverflow.ellipsis);
   });
 
-  for (final size in [const Size(800, 600), const Size(600, 320)]) {
+  for (final size in [const Size(360, 800), const Size(800, 600), const Size(600, 320)]) {
     testWidgets('home content scrolls at $size without losing transactions', (tester) async {
       await tester.binding.setSurfaceSize(size);
       addTearDown(() => tester.binding.setSurfaceSize(null));

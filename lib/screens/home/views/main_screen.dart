@@ -72,7 +72,8 @@ class MainScreen extends StatelessWidget {
             const SizedBox(height: 20,),
             Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width / 2,
+              constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.width / 2),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -113,10 +114,13 @@ class MainScreen extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      spacing: 16,
+                      runSpacing: 12,
                       children: [
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
                               width: 25,
@@ -158,6 +162,7 @@ class MainScreen extends StatelessWidget {
                           ],
                         ),
                         Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
                               width: 25,
