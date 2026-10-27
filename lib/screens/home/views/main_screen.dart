@@ -210,8 +210,10 @@ class MainScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              spacing: 16,
+              runSpacing: 8,
               children: [
                 Text(
                   'Transactions',

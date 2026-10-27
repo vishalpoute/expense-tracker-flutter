@@ -19,7 +19,7 @@ void main() {
     expect(label.overflow, TextOverflow.ellipsis);
   });
 
-  for (final size in [const Size(360, 800), const Size(800, 600), const Size(600, 320)]) {
+  for (final size in [const Size(320, 800), const Size(360, 800), const Size(800, 600), const Size(600, 320)]) {
     testWidgets('home content scrolls at $size without losing transactions', (tester) async {
       await tester.binding.setSurfaceSize(size);
       addTearDown(() => tester.binding.setSurfaceSize(null));
